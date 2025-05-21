@@ -1,0 +1,2865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GYMFIT Premium</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4CAF50;
+      --primary-dark: #2E7D32;
+      --primary-light: #81C784;
+      --secondary-color: #FF9800;
+      --accent-color: #9C27B0;
+      --dark-bg: #121212;
+      --dark-card: #1E1E1E;
+      --dark-text: #E0E0E0;
+      --light-bg: #f5f5f5;
+      --light-card: #ffffff;
+      --light-text: #333333;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.05);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    /* Fuentes personalizadas */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto+Flex:wght@300;400;500;600&display=swap');
+    
+    body {
+      font-family: 'Roboto Flex', sans-serif;
+      margin: 0;
+      padding-bottom: 80px;
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+      transition: var(--transition);
+      line-height: 1.6;
+    }
+    
+    body.claro {
+      background-color: var(--light-bg);
+      color: var(--light-text);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+    
+    .header {
+      padding: 20px 15px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      margin-bottom: 5px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 1.8em;
+      letter-spacing: 1px;
+    }
+    
+    .header p {
+      margin: 5px 0 0;
+      opacity: 0.9;
+      font-size: 0.9em;
+    }
+    
+    .control-btn {
+      position: fixed;
+      top: 10px;
+      cursor: pointer;
+      padding: 10px;
+      background: rgba(30, 30, 30, 0.7);
+      border-radius: 50%;
+      z-index: 10;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    body.claro .control-btn {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .modo-toggle { right: 10px; }
+    .mute-btn { right: 60px; }
+    .profile-btn { left: 10px; }
+    
+    .control-btn:hover {
+      transform: scale(1.1);
+      background: rgba(30, 30, 30, 0.9);
+    }
+    
+    body.claro .control-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .control-btn i {
+      font-size: 1.2em;
+    }
+    
+    .card {
+      padding: 20px;
+      margin: 15px 10px;
+      background: var(--dark-card);
+      border-radius: 15px;
+      display: none;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      animation: fadeIn 0.5s ease-out;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    body.claro .card {
+      background: var(--light-card);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .card.active { 
+      display: block;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    
+    .section-title {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary-dark);
+    }
+    
+    .section-title i {
+      font-size: 1.1em;
+    }
+    
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background: var(--dark-card);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+      padding: 12px 0;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+      background-color: rgba(30, 30, 30, 0.8);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    body.claro .nav-bar {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .nav-bar button {
+      background: none;
+      border: none;
+      font-size: 1.4em;
+      color: var(--dark-text);
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: var(--transition);
+      position: relative;
+      opacity: 0.7;
+      border-radius: 50%;
+    }
+    
+    body.claro .nav-bar button {
+      color: var(--light-text);
+    }
+    
+    .nav-bar button.active {
+      opacity: 1;
+      color: var(--primary-color);
+      transform: translateY(-10px);
+      background: rgba(76, 175, 80, 0.2);
+    }
+    
+    .nav-bar button::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .nav-bar button.active::after {
+      opacity: 1;
+      bottom: -3px;
+    }
+    
+    .nav-bar button:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    
+    ul, ol { 
+      padding-left: 22px;
+      line-height: 1.8;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background: #333;
+      color: white;
+      font-size: 16px;
+      transition: var(--transition);
+      font-family: 'Roboto Flex', sans-serif;
+    }
+    
+    body.claro input, 
+    body.claro textarea,
+    body.claro select {
+      background: white;
+      color: var(--light-text);
+      border: 1px solid #ddd;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+    
+    button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      width: 100%;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.9em;
+    }
+    
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    button.secondary {
+      background: var(--secondary-color);
+    }
+    
+    button.secondary:hover {
+      background: #F57C00;
+    }
+    
+    button.accent {
+      background: var(--accent-color);
+    }
+    
+    button.accent:hover {
+      background: #7B1FA2;
+    }
+    
+    button.outline {
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    body.claro button.outline {
+      color: var(--primary-dark);
+    }
+    
+    button.outline:hover {
+      background: rgba(76, 175, 80, 0.1);
+    }
+    
+    .progress-container {
+      margin: 25px 0;
+    }
+    
+    .progress-bar {
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    body.claro .progress-bar {
+      background: #e0e0e0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+      width: 0%;
+      transition: width 1s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+      );
+      background-size: 20px 20px;
+      animation: moveStripes 1s linear infinite;
+    }
+    
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9em;
+      color: var(--dark-text);
+      opacity: 0.8;
+    }
+    
+    body.claro .progress-info {
+      color: var(--light-text);
+    }
+    
+    .exercise-item {
+      background: #333;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    body.claro .exercise-item {
+      background: #f0f0f0;
+    }
+    
+    .exercise-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .exercise-item.completed {
+      border-left: 5px solid var(--primary-color);
+      background: #2a2a2a;
+    }
+    
+    body.claro .exercise-item.completed {
+      background: #e8f5e9;
+    }
+    
+    .exercise-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: var(--primary-color);
+    }
+    
+    .exercise-info h4 {
+      margin: 0 0 5px;
+      color: var(--primary-color);
+    }
+    
+    body.claro .exercise-info h4 {
+      color: var(--primary-dark);
+    }
+    
+    .exercise-info p {
+      margin: 0;
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    
+    .stat-card {
+      background: #333;
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    body.claro .stat-card {
+      background: #f0f0f0;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .stat-value {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 5px 0;
+    }
+    
+    .stat-label {
+      font-size: 0.85em;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .stat-card i {
+      font-size: 1.5em;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes moveStripes {
+      from { background-position: 0 0; }
+      to { background-position: 20px 0; }
+    }
+    
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .calendar-title {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .calendar-nav {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .calendar-nav button {
+      width: auto;
+      padding: 8px 12px;
+      font-size: 0.8em;
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 15px;
+    }
+    
+    .calendar-day {
+      padding: 10px 5px;
+      text-align: center;
+      border-radius: 8px;
+      background: #333;
+      cursor: pointer;
+      transition: var(--transition);
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 0.9em;
+    }
+    
+    body.claro .calendar-day {
+      background: #f0f0f0;
+    }
+    
+    .calendar-day:hover {
+      transform: scale(1.05);
+    }
+    
+    .calendar-day.empty {
+      background: transparent;
+      cursor: default;
+    }
+    
+    .calendar-day.today {
+      background: var(--primary-color);
+      color: white;
+      font-weight: bold;
+    }
+    
+    .calendar-day.has-workout {
+      position: relative;
+      border: 2px solid var(--primary-color);
+    }
+    
+    .calendar-day.has-workout::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      background: var(--primary-color);
+      border-radius: 50%;
+    }
+    
+    .calendar-day.today.has-workout::after {
+      background: white;
+    }
+    
+    .workout-details {
+      margin-top: 20px;
+      padding: 18px;
+      background: #333;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    body.claro .workout-details {
+      background: #f0f0f0;
+    }
+    
+    .workout-details h4 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+    
+    .nutrition-facts {
+      margin-top: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .nutrition-header {
+      background: var(--primary-color);
+      color: white;
+      padding: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .nutrition-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: #333;
+      margin-bottom: 1px;
+    }
+    
+    body.claro .nutrition-row {
+      background: #f0f0f0;
+    }
+    
+    .nutrition-row:nth-child(even) {
+      background: #3a3a3a;
+    }
+    
+    body.claro .nutrition-row:nth-child(even) {
+      background: #e0e0e0;
+    }
+    
+    .nutrition-category {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .motivation-card {
+      background: #333;
+      padding: 25px 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      text-align: center;
+      font-style: italic;
+      font-size: 1.1em;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    body.claro .motivation-card {
+      background: #f0f0f0;
+    }
+    
+    .motivation-card::before, .motivation-card::after {
+      content: '"';
+      font-size: 3em;
+      color: var(--primary-color);
+      position: absolute;
+      opacity: 0.3;
+    }
+    
+    .motivation-card::before {
+      top: 5px;
+      left: 10px;
+    }
+    
+    .motivation-card::after {
+      bottom: -15px;
+      right: 10px;
+    }
+    
+    .quote-author {
+      margin-top: 15px;
+      text-align: right;
+      font-style: normal;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .recipe-card {
+      margin: 20px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .recipe-image {
+      height: 150px;
+      background: linear-gradient(45deg, #2E7D32, #81C784);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2em;
+    }
+    
+    .recipe-content {
+      padding: 15px;
+      background: #333;
+    }
+    
+    body.claro .recipe-content {
+      background: #f0f0f0;
+    }
+    
+    .recipe-title {
+      margin: 0 0 10px;
+      color: var(--primary-color);
+    }
+    
+    .tab-container {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #444;
+    }
+    
+    body.claro .tab-container {
+      border-bottom-color: #ddd;
+    }
+    
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+    }
+    
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .water-tracker {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+    
+    .water-glass {
+      width: 40px;
+      height: 60px;
+      background: #e3f2fd;
+      border: 2px solid #bbdefb;
+      border-radius: 0 0 10px 10px;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .water-glass.filled {
+      background: #bbdefb;
+    }
+    
+    .water-glass.filled::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 15px;
+      height: 15px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+    }
+    
+    .water-glass:hover {
+      transform: translateY(-5px);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal.active {
+      display: flex;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .modal-content {
+      background: var(--dark-card);
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+    
+    body.claro .modal-content {
+      background: var(--light-card);
+    }
+    
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-dark);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: var(--dark-text);
+      transition: var(--transition);
+    }
+    
+    body.claro .modal-close {
+      color: var(--light-text);
+    }
+    
+    .modal-close:hover {
+      color: var(--primary-color);
+      transform: rotate(90deg);
+    }
+    
+    .exercise-demo {
+      margin: 15px 0;
+      padding: 15px;
+      background: #333;
+      border-radius: 12px;
+    }
+    
+    body.claro .exercise-demo {
+      background: #f0f0f0;
+    }
+    
+    .exercise-demo img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .exercise-demo h5 {
+      margin: 10px 0 5px;
+      color: var(--primary-color);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.7em;
+      font-weight: bold;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    
+    .badge.new {
+      background: var(--accent-color);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    
+    .btn-group button {
+      flex: 1;
+    }
+    
+    /* Notificaciones */
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .notification.success {
+      background-color: var(--primary-color);
+    }
+    
+    .notification.error {
+      background-color: #f44336;
+    }
+    
+    .notification.info {
+      background-color: #2196F3;
+    }
+    
+    /* Animaciones */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-10px);}
+      60% {transform: translateY(-5px);}
+    }
+    
+    .bounce {
+      animation: bounce 1s;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .spin {
+      animation: spin 1s linear;
+    }
+    
+    @media (min-width: 768px) {
+      .card {
+        max-width: 600px;
+        margin: 20px auto;
+      }
+      
+      .nav-bar {
+        max-width: 600px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 25px 25px 0 0;
+        bottom: 10px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
+      .header h1 {
+        font-size: 2.2em;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .section-title {
+        font-size: 1.2em;
+      }
+      
+      .control-btn {
+        width: 38px;
+        height: 38px;
+      }
+      
+      .mute-btn { right: 55px; }
+      
+      .nav-bar button {
+        font-size: 1.2em;
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+<body onload="iniciarApp()">
+  <div class="header">
+    <h1>GYMFIT <span class="badge new">PREMIUM</span></h1>
+    <p>Transforma tu cuerpo, transforma tu vida</p>
+  </div>
+
+  <div class="profile-btn" onclick="mostrarSeccion('perfil')"><i class="fas fa-user"></i></div>
+  <div class="modo-toggle" onclick="toggleModo()"><i class="fas fa-moon"></i></div>
+  <div class="mute-btn" onclick="toggleMusica()"><i class="fas fa-volume-mute"></i></div>
+  <audio id="musica" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+
+  <!-- Modal de bienvenida -->
+  <div class="modal" id="welcome-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>¡Bienvenido a GYMFIT Premium!</h3>
+        <button class="modal-close" onclick="cerrarModal('welcome-modal')">&times;</button>
+      </div>
+      <p>Estamos emocionados de acompañarte en tu viaje fitness. Aquí tienes algunas características destacadas:</p>
+      <ul>
+        <li>Rutinas personalizadas según tu nivel</li>
+        <li>Seguimiento detallado de tu progreso</li>
+        <li>Plan de alimentación adaptado a tus objetivos</li>
+        <li>Calendario de entrenamiento interactivo</li>
+        <li>Motivación diaria para mantenerte enfocado</li>
+      </ul>
+      <div class="btn-group">
+        <button onclick="cerrarModal('welcome-modal')">Comenzar</button>
+        <button class="outline" onclick="mostrarTutorial()">Ver Tutorial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de ejercicio -->
+  <div class="modal" id="exercise-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="exercise-modal-title">Ejercicio</h3>
+        <button class="modal-close" onclick="cerrarModal('exercise-modal')">&times;</button>
+      </div>
+      <div class="exercise-demo" id="exercise-modal-content">
+        <!-- Contenido se llena dinámicamente -->
+      </div>
+      <button onclick="cerrarModal('exercise-modal')">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="card active" id="inicio">
+    <div class="section-title"><i class="fas fa-home"></i> Inicio</div>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="fas fa-fire"></i>
+        <div class="stat-value" id="streak-days">0</div>
+        <div class="stat-label">Días consecutivos</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-dumbbell"></i>
+        <div class="stat-value" id="workouts-completed">0</div>
+        <div class="stat-label">Entrenamientos</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-tint"></i>
+        <div class="stat-value" id="water-intake">0/8</div>
+        <div class="stat-label">Vasos de agua</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-bolt"></i>
+        <div class="stat-value" id="calories-burned">0</div>
+        <div class="stat-label">Calorías</div>
+      </div>
+    </div>
+    
+    <h3><i class="fas fa-calendar-day"></i> Rutina de hoy</h3>
+    <div id="today-workout">
+      <p>Cargando tu rutina personalizada...</p>
+    </div>
+    
+    <div class="water-tracker" id="water-tracker">
+      <!-- Se llena dinámicamente -->
+    </div>
+    
+    <h3><i class="fas fa-utensils"></i> Receta saludable</h3>
+    <div id="recetaDia"></div>
+    
+    <button class="secondary" onclick="mostrarSeccion('progreso')"><i class="fas fa-dumbbell"></i> Comenzar entrenamiento</button>
+  </div>
+
+  <div class="card" id="alimentacion">
+    <div class="section-title"><i class="fas fa-utensils"></i> Alimentación</div>
+    
+    <div class="tab-container">
+      <div class="tab active" onclick="cambiarTab('receta')">Receta del día</div>
+      <div class="tab" onclick="cambiarTab('plan')">Plan de comidas</div>
+      <div class="tab" onclick="cambiarTab('macros')">Seguimiento</div>
+    </div>
+    
+    <div class="tab-content active" id="receta-tab">
+      <div class="recipe-card">
+        <div class="recipe-image">
+          <i class="fas fa-utensils"></i>
+        </div>
+        <div class="recipe-content">
+          <h3 class="recipe-title" id="recipe-title">Receta del día</h3>
+          <div id="recetaDiaFull"></div>
+        </div>
+      </div>
+      
+      <div class="nutrition-facts">
+        <div class="nutrition-header">Información Nutricional</div>
+        <div class="nutrition-row">
+          <span>Calorías</span>
+          <span id="nutrition-calories">350</span>
+        </div>
+        <div class="nutrition-row">
+          <span>Proteínas</span>
+          <span id="nutrition-protein">25g</span>
+        </div>
+        <div class="nutrition-row">
+          <span>Carbohidratos</span>
+          <span id="nutrition-carbs">40g</span>
+        </div>
+        <div class="nutrition-row">
+          <span>Grasas</span>
+          <span id="nutrition-fat">12g</span>
+        </div>
+        <div class="nutrition-row">
+          <span>Fibra</span>
+          <span id="nutrition-fiber">8g</span>
+        </div>
+      </div>
+      
+      <button onclick="leerRecetaActual()"><i class="fas fa-volume-up"></i> Escuchar receta</button>
+    </div>
+    
+    <div class="tab-content" id="plan-tab">
+      <select id="meal-plan-select">
+        <option value="weight-loss">Pérdida de peso</option>
+        <option value="muscle-gain">Ganancia muscular</option>
+        <option value="maintenance">Mantenimiento</option>
+        <option value="vegan">Vegano</option>
+        <option value="keto">Cetogénico</option>
+      </select>
+      
+      <div class="btn-group">
+        <button onclick="generarPlanComidas()">Generar Plan</button>
+        <button class="outline" onclick="guardarPlanComidas()">Guardar Plan</button>
+      </div>
+      
+      <div id="meal-plan-result"></div>
+    </div>
+    
+    <div class="tab-content" id="macros-tab">
+      <h4>Seguimiento de Macronutrientes</h4>
+      <p>Registra tu consumo diario:</p>
+      
+      <div class="progress-container">
+        <label>Proteínas</label>
+        <div class="progress-bar">
+          <div class="progress-fill" id="protein-progress" style="width: 0%"></div>
+        </div>
+        <div class="progress-info">
+          <span id="protein-consumed">0g</span>
+          <span id="protein-goal">0g objetivo</span>
+        </div>
+      </div>
+      
+      <div class="progress-container">
+        <label>Carbohidratos</label>
+        <div class="progress-bar">
+          <div class="progress-fill" id="carbs-progress" style="width: 0%"></div>
+        </div>
+        <div class="progress-info">
+          <span id="carbs-consumed">0g</span>
+          <span id="carbs-goal">0g objetivo</span>
+        </div>
+      </div>
+      
+      <div class="progress-container">
+        <label>Grasas</label>
+        <div class="progress-bar">
+          <div class="progress-fill" id="fat-progress" style="width: 0%"></div>
+        </div>
+        <div class="progress-info">
+          <span id="fat-consumed">0g</span>
+          <span id="fat-goal">0g objetivo</span>
+        </div>
+      </div>
+      
+      <button onclick="mostrarModalMacros()"><i class="fas fa-edit"></i> Registrar consumo</button>
+    </div>
+  </div>
+
+  <div class="card" id="perfil">
+    <div class="section-title"><i class="fas fa-user"></i> Mi Perfil</div>
+    
+    <div class="tab-container">
+      <div class="tab active" onclick="cambiarTab('info')">Información</div>
+      <div class="tab" onclick="cambiarTab('metrics')">Medidas</div>
+      <div class="tab" onclick="cambiarTab('settings')">Ajustes</div>
+    </div>
+    
+    <div class="tab-content active" id="info-tab">
+      <input type="text" id="nombre" placeholder="Nombre completo" />
+      <input type="number" id="edad" placeholder="Edad" min="10" max="100" />
+      <select id="genero">
+        <option value="">Selecciona tu género</option>
+        <option value="male">Masculino</option>
+        <option value="female">Femenino</option>
+        <option value="other">Otro</option>
+        <option value="none">Prefiero no decir</option>
+      </select>
+      <textarea id="objetivos" placeholder="¿Cuáles son tus objetivos? Ej: Perder 5kg, ganar masa muscular, mejorar resistencia..."></textarea>
+      <select id="nivel">
+        <option value="">Nivel de actividad</option>
+        <option value="beginner">Principiante</option>
+        <option value="intermediate">Intermedio</option>
+        <option value="advanced">Avanzado</option>
+      </select>
+      
+      <button onclick="guardarPerfil()"><i class="fas fa-save"></i> Guardar Perfil</button>
+      <div id="perfilGuardado"></div>
+    </div>
+    
+    <div class="tab-content" id="metrics-tab">
+      <h4>Registro de Medidas</h4>
+      <p>Actualiza tus medidas corporales para seguir tu progreso:</p>
+      
+      <input type="number" id="peso" placeholder="Peso (kg)" step="0.1" />
+      <input type="number" id="altura" placeholder="Altura (cm)" />
+      <input type="number" id="waist" placeholder="Circunferencia de cintura (cm)" step="0.1" />
+      <input type="number" id="hip" placeholder="Circunferencia de cadera (cm)" step="0.1" />
+      
+      <div class="btn-group">
+        <button onclick="guardarMedidas()"><i class="fas fa-ruler"></i> Guardar Medidas</button>
+        <button class="outline" onclick="mostrarHistorialMedidas()"><i class="fas fa-history"></i> Ver Historial</button>
+      </div>
+      
+      <div id="imc-result"></div>
+    </div>
+    
+    <div class="tab-content" id="settings-tab">
+      <h4>Preferencias de la App</h4>
+      
+      <div class="exercise-item" onclick="toggleModo()">
+        <div>
+          <h4>Modo Oscuro/Claro</h4>
+          <p>Cambia el tema de la aplicación</p>
+        </div>
+        <i class="fas fa-moon"></i>
+      </div>
+      
+      <div class="exercise-item" onclick="toggleMusica()">
+        <div>
+          <h4>Música/Ambiente</h4>
+          <p>Activa o desactiva el sonido</p>
+        </div>
+        <i class="fas fa-volume-mute"></i>
+      </div>
+      
+      <div class="exercise-item" onclick="mostrarNotificaciones()">
+        <div>
+          <h4>Notificaciones</h4>
+          <p>Configura recordatorios</p>
+        </div>
+        <i class="fas fa-bell"></i>
+      </div>
+      
+      <div class="exercise-item" onclick="exportarDatos()">
+        <div>
+          <h4>Exportar Datos</h4>
+          <p>Guarda tu progreso</p>
+        </div>
+        <i class="fas fa-file-export"></i>
+      </div>
+      
+      <button class="accent" onclick="resetApp()"><i class="fas fa-trash"></i> Restablecer Aplicación</button>
+    </div>
+  </div>
+
+  <div class="card" id="progreso">
+    <div class="section-title"><i class="fas fa-chart-line"></i> Progreso</div>
+    
+    <div class="progress-container">
+      <label>Objetivo: 30 días de entrenamiento</label>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-info">
+        <span id="progress-days">0/30 días</span>
+        <span id="progress-percent">0% completado</span>
+      </div>
+    </div>
+    
+    <p><i class="fas fa-calendar-day"></i> Día de entrenamiento: <strong id="diaEntrenamiento">1</strong></p>
+    <p><i class="fas fa-lightbulb"></i> Recomendación de hoy:</p>
+    <div id="recomendacion"></div>
+    
+    <h3><i class="fas fa-dumbbell"></i> Rutina de hoy</h3>
+    <div id="today-exercises">
+      <!-- Ejercicios se generan dinámicamente -->
+    </div>
+    
+    <div class="btn-group">
+      <button onclick="completarEntrenamiento()"><i class="fas fa-check-circle"></i> Marcar como completado</button>
+      <button class="outline" onclick="mostrarSeccion('calendar')"><i class="fas fa-calendar-plus"></i> Programar rutina</button>
+    </div>
+    
+    <h3><i class="fas fa-chart-bar"></i> Estadísticas</h3>
+    <canvas id="progress-chart" width="100%" height="200"></canvas>
+    
+    <h3><i class="fas fa-trophy"></i> Últimos logros</h3>
+    <div id="recent-achievements">
+      <!-- Logros recientes se muestran aquí -->
+    </div>
+  </div>
+
+  <div class="card" id="motivacion">
+    <div class="section-title"><i class="fas fa-quote-left"></i> Motivación</div>
+    
+    <div class="motivation-card">
+      <p id="mensajeMotivador">Cargando mensaje motivador...</p>
+      <div class="quote-author" id="quote-author"></div>
+    </div>
+    
+    <button onclick="mostrarMotivacion()"><i class="fas fa-sync-alt"></i> Nuevo mensaje</button>
+    
+    <h3><i class="fas fa-trophy"></i> Logros</h3>
+    <div id="achievements-list">
+      <!-- Logros se generan dinámicamente -->
+    </div>
+    
+    <h3><i class="fas fa-medal"></i> Insignias</h3>
+    <div id="badges-grid" class="stats-grid">
+      <!-- Insignias se generan dinámicamente -->
+    </div>
+  </div>
+
+  <div class="card" id="calendar">
+    <div class="section-title"><i class="fas fa-calendar-alt"></i> Calendario</div>
+    
+    <div class="calendar-header">
+      <div class="calendar-title" id="calendar-month">Mes</div>
+      <div class="calendar-nav">
+        <button class="outline" onclick="previousMonth()"><i class="fas fa-chevron-left"></i></button>
+        <button class="outline" onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    
+    <div class="calendar-grid" id="calendar-grid">
+      <!-- Días del calendario se generan dinámicamente -->
+    </div>
+    
+    <div class="workout-details" id="workout-details">
+      <p>Selecciona un día para ver los detalles del entrenamiento</p>
+    </div>
+    
+    <h3><i class="fas fa-plus-circle"></i> Agendar rutina</h3>
+    <input type="date" id="workout-date" />
+    <input type="text" id="workout-name" placeholder="Nombre de la rutina" />
+    <textarea id="workout-notes" placeholder="Notas o ejercicios específicos"></textarea>
+    
+    <div class="btn-group">
+      <button onclick="guardarRutina()"><i class="fas fa-save"></i> Guardar Rutina</button>
+      <button class="outline" onclick="generarRutinaAutomatica()"><i class="fas fa-magic"></i> Generar Automática</button>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <button onclick="mostrarSeccion('inicio')" class="active"><i class="fas fa-home"></i></button>
+    <button onclick="mostrarSeccion('progreso')"><i class="fas fa-chart-line"></i></button>
+    <button onclick="mostrarSeccion('alimentacion')"><i class="fas fa-utensils"></i></button>
+    <button onclick="mostrarSeccion('motivacion')"><i class="fas fa-quote-left"></i></button>
+    <button onclick="mostrarSeccion('calendar')"><i class="fas fa-calendar-alt"></i></button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // =============== DATOS DE LA APLICACIÓN ===============
+    const recetasDetalladas = Array.from({length: 365}, (_, i) => ({
+      id: i + 1,
+      titulo: `Receta saludable #${i + 1}`,
+      ingredientes: [
+        `${Math.random() > 0.5 ? 'Pechuga de pollo' : 'Filete de pescado'} (${Math.floor(100 + Math.random() * 100)}g)`,
+        `${['Espinacas', 'Brócoli', 'Zucchini', 'Coliflor'][Math.floor(Math.random() * 4)]} (${Math.floor(50 + Math.random() * 100)}g)`,
+        `${['Quinoa', 'Arroz integral', 'Batata', 'Lentejas'][Math.floor(Math.random() * 4)]} (${Math.floor(50 + Math.random() * 80)}g)`,
+        'Aceite de oliva (1 cucharada)',
+        'Especias al gusto'
+      ],
+      pasos: [
+        "Lavar y preparar todos los ingredientes.",
+        "Cocinar la proteína principal a fuego medio con un poco de aceite.",
+        "Preparar los vegetales al vapor o salteados.",
+        "Cocinar los carbohidratos según las instrucciones del paquete.",
+        "Combinar todos los ingredientes y sazonar al gusto.",
+        "Servir caliente y disfrutar de una comida nutritiva."
+      ],
+      nutricion: {
+        calorias: Math.floor(300 + Math.random() * 300),
+        proteinas: Math.floor(20 + Math.random() * 20) + 'g',
+        carbohidratos: Math.floor(30 + Math.random() * 50) + 'g',
+        grasas: Math.floor(8 + Math.random() * 15) + 'g',
+        fibra: Math.floor(5 + Math.random() * 10) + 'g'
+      },
+      tipo: ['proteica', 'balanceada', 'vegetariana', 'baja en carbohidratos'][Math.floor(Math.random() * 4)]
+    }));
+
+    const mensajes = [
+      { 
+        texto: "El éxito no es siempre ser el mejor. Es siempre dar lo mejor de ti.", 
+        autor: "Anónimo" 
+      },
+      { 
+        texto: "No cuentes los días, haz que los días cuenten.", 
+        autor: "Muhammad Ali" 
+      },
+      { 
+        texto: "La disciplina es el puente entre tus metas y tus logros.", 
+        autor: "Jim Rohn" 
+      },
+      { 
+        texto: "No importa lo lento que vayas, siempre y cuando no te detengas.", 
+        autor: "Confucio" 
+      },
+      { 
+        texto: "El cuerpo alcanza lo que la mente cree.", 
+        autor: "Anónimo" 
+      },
+      { 
+        texto: "El dolor que sientes hoy será la fuerza que sentirás mañana.", 
+        autor: "Arnold Schwarzenegger" 
+      },
+      { 
+        texto: "La única mala sesión de entrenamiento es aquella que no hiciste.", 
+        autor: "Coach Carlos" 
+      },
+      { 
+        texto: "No te rindas. Sueña. Entrena. Logra.", 
+        autor: "Comunidad GYMFIT" 
+      }
+    ];
+
+    const ejercicios = {
+      beginner: [
+        { 
+          nombre: "Sentadillas", 
+          series: 3, 
+          repeticiones: 12, 
+          completado: false,
+          descripcion: "Párate con los pies al ancho de los hombros. Baja el cuerpo como si te sentaras en una silla, manteniendo la espalda recta. Vuelve a la posición inicial.",
+          musculos: "Piernas, glúteos"
+        },
+        { 
+          nombre: "Flexiones (rodillas)", 
+          series: 3, 
+          repeticiones: 8, 
+          completado: false,
+          descripcion: "Apoya las rodillas en el suelo y coloca las manos un poco más abiertas que el ancho de los hombros. Baja el pecho hacia el suelo y luego empuja hacia arriba.",
+          musculos: "Pecho, brazos"
+        },
+        { 
+          nombre: "Plancha", 
+          series: 3, 
+          duracion: "30 seg", 
+          completado: false,
+          descripcion: "Apoya los antebrazos en el suelo con los codos alineados bajo los hombros. Mantén el cuerpo recto desde la cabeza hasta los pies.",
+          musculos: "Core, abdominales"
+        },
+        { 
+          nombre: "Remo con banda", 
+          series: 3, 
+          repeticiones: 10, 
+          completado: false,
+          descripcion: "Sujeta una banda elástica con ambas manos. Tira de la banda hacia tu torso, manteniendo los codos cerca del cuerpo.",
+          musculos: "Espalda, brazos"
+        }
+      ],
+      intermediate: [
+        { 
+          nombre: "Sentadillas con salto", 
+          series: 4, 
+          repeticiones: 10, 
+          completado: false,
+          descripcion: "Realiza una sentadilla normal y al subir, salta explosivamente. Aterriza suavemente y repite.",
+          musculos: "Piernas, glúteos, cardio"
+        },
+        { 
+          nombre: "Flexiones", 
+          series: 4, 
+          repeticiones: 12, 
+          completado: false,
+          descripcion: "Mantén el cuerpo recto desde la cabeza hasta los talones. Baja el pecho hasta casi tocar el suelo y luego empuja hacia arriba.",
+          musculos: "Pecho, hombros, tríceps"
+        },
+        { 
+          nombre: "Plancha", 
+          series: 3, 
+          duracion: "45 seg", 
+          completado: false,
+          descripcion: "Mantén la posición de plancha con el cuerpo completamente recto. Evita arquear la espalda.",
+          musculos: "Core completo"
+        },
+        { 
+          nombre: "Dominadas asistidas", 
+          series: 3, 
+          repeticiones: 6, 
+          completado: false,
+          descripcion: "Usa una banda de resistencia o una máquina asistida. Tira de tu cuerpo hacia arriba hasta que la barbilla pase la barra.",
+          musculos: "Espalda, bíceps"
+        },
+        { 
+          nombre: "Zancadas", 
+          series: 3, 
+          repeticiones: "10 por pierna", 
+          completado: false,
+          descripcion: "Da un paso adelante y baja la rodilla trasera hacia el suelo. Mantén el torso erguido y vuelve a la posición inicial.",
+          musculos: "Piernas, glúteos"
+        }
+      ],
+      advanced: [
+        { 
+          nombre: "Sentadillas con peso", 
+          series: 4, 
+          repeticiones: 8, 
+          completado: false,
+          descripcion: "Sostén una pesa o mancuerna a la altura del pecho. Realiza la sentadilla manteniendo el peso cerca del cuerpo.",
+          musculos: "Piernas, glúteos, core"
+        },
+        { 
+          nombre: "Flexiones diamante", 
+          series: 4, 
+          repeticiones: 10, 
+          completado: false,
+          descripcion: "Coloca las manos juntas formando un diamante con los dedos. Realiza flexiones manteniendo los codos cerca del cuerpo.",
+          musculos: "Tríceps, pecho"
+        },
+        { 
+          nombre: "Plancha con elevación de pierna", 
+          series: 3, 
+          duracion: "60 seg", 
+          completado: false,
+          descripcion: "En posición de plancha, alterna elevando cada pierna unos centímetros del suelo. Mantén el core activo.",
+          musculos: "Core, glúteos"
+        },
+        { 
+          nombre: "Dominadas", 
+          series: 4, 
+          repeticiones: 8, 
+          completado: false,
+          descripcion: "Cuelga de una barra con las palmas hacia adelante. Tira de tu cuerpo hacia arriba hasta que la barbilla pase la barra.",
+          musculos: "Espalda, bíceps"
+        },
+        { 
+          nombre: "Burpees", 
+          series: 3, 
+          repeticiones: 10, 
+          completado: false,
+          descripcion: "Desde posición de pie, baja a posición de plancha, haz una flexión, salta los pies hacia las manos y salta explosivamente.",
+          musculos: "Full body, cardio"
+        },
+        { 
+          nombre: "Fondos en paralelas", 
+          series: 3, 
+          repeticiones: 8, 
+          completado: false,
+          descripcion: "Sostén tu peso en las paralelas. Baja el cuerpo doblando los codos hasta que los hombros estén al nivel de los codos.",
+          musculos: "Tríceps, pecho"
+        }
+      ]
+    };
+
+    const logros = [
+      { 
+        nombre: "Primeros pasos", 
+        descripcion: "Completa tu primer entrenamiento", 
+        obtenido: false,
+        insignia: "🥇"
+      },
+      { 
+        nombre: "Racha de 3 días", 
+        descripcion: "Entrena 3 días consecutivos", 
+        obtenido: false,
+        insignia: "🔥"
+      },
+      { 
+        nombre: "Nutrición balanceada", 
+        descripcion: "Sigue el plan de alimentación por una semana", 
+        obtenido: false,
+        insignia: "🍎"
+      },
+      { 
+        nombre: "Mitad del camino", 
+        descripcion: "Completa 15 días de entrenamiento", 
+        obtenido: false,
+        insignia: "⏳"
+      },
+      { 
+        nombre: "Campeón", 
+        descripcion: "Completa 30 días de entrenamiento", 
+        obtenido: false,
+        insignia: "🏆"
+      },
+      { 
+        nombre: "Maestro del Agua", 
+        descripcion: "Toma 8 vasos de agua por 7 días seguidos", 
+        obtenido: false,
+        insignia: "💧"
+      },
+      { 
+        nombre: "Flexibilidad", 
+        descripcion: "Realiza estiramientos por 10 días seguidos", 
+        obtenido: false,
+        insignia: "🧘"
+      },
+      { 
+        nombre: "Metas Cumplidas", 
+        descripcion: "Alcanza el 100% de tus objetivos semanales", 
+        obtenido: false,
+        insignia: "✅"
+      }
+    ];
+
+    const badges = [
+      { nombre: "Principiante", obtenida: false, icono: "👶", descripcion: "Completa tu primer entrenamiento" },
+      { nombre: "Consistente", obtenida: false, icono: "🔁", descripcion: "3 días consecutivos de entrenamiento" },
+      { nombre: "Dedicado", obtenida: false, icono: "💪", descripcion: "7 días de entrenamiento" },
+      { nombre: "Atleta", obtenida: false, icono: "🏅", descripcion: "15 días de entrenamiento" },
+      { nombre: "Campeón", obtenida: false, icono: "🏆", descripcion: "30 días de entrenamiento" },
+      { nombre: "Hidratado", obtenida: false, icono: "💦", descripcion: "Toma 8 vasos de agua por 7 días" },
+      { nombre: "Nutrición", obtenida: false, icono: "🍏", descripcion: "Sigue el plan de comidas por 7 días" },
+      { nombre: "Flexible", obtenida: false, icono: "🧘", descripcion: "Estira por 10 días seguidos" }
+    ];
+
+    const mealPlans = {
+      "weight-loss": {
+        name: "Pérdida de peso",
+        description: "Plan bajo en calorías con énfasis en proteínas y vegetales",
+        meals: {
+          breakfast: "Batido de proteína con espinacas, 1/2 plátano y 1 cucharada de mantequilla de almendras",
+          snack1: "1 puñado de almendras (20-25 unidades)",
+          lunch: "Pechuga de pollo a la plancha (150g) con quinoa (1/2 taza) y vegetales al vapor",
+          snack2: "Yogur griego sin azúcar con 5 fresas",
+          dinner: "Salmón (120g) con espárragos y ensalada verde con limón",
+          notes: "Beber al menos 2 litros de agua al día. Evitar azúcares añadidos."
+        },
+        macros: {
+          protein: 120,
+          carbs: 100,
+          fat: 50
+        }
+      },
+      "muscle-gain": {
+        name: "Ganancia muscular",
+        description: "Plan alto en proteínas con carbohidratos complejos",
+        meals: {
+          breakfast: "Avena (1 taza) con proteína en polvo, 1 cucharada de mantequilla de maní y 1 plátano",
+          snack1: "2 huevos duros y 1 rebanada de pan integral",
+          lunch: "Arroz integral (1 taza), carne magra (200g) y brócoli con 1 cucharada de aceite de oliva",
+          snack2: "Batido de proteína con leche y 1 cucharada de avena",
+          dinner: "Pasta integral (100g secos) con atún (1 lata) y vegetales salteados",
+          notes: "Consumir proteína cada 3-4 horas. Asegurar superávit calórico."
+        },
+        macros: {
+          protein: 180,
+          carbs: 250,
+          fat: 70
+        }
+      },
+      "maintenance": {
+        name: "Mantenimiento",
+        description: "Plan balanceado para mantener peso y condición física",
+        meals: {
+          breakfast: "2 tostadas integrales con aguacate (1/2 unidad) y 2 huevos revueltos",
+          snack1: "1 manzana con 1 cucharada de mantequilla de almendras",
+          lunch: "Wrap de pollo (tortilla integral) con vegetales y 1 cucharada de aderezo light",
+          snack2: "1 puñado de nueces y 1 yogur natural",
+          dinner: "Filete de pescado (150g) con camote (1/2 taza) y ensalada variada",
+          notes: "Mantener balance entre macronutrientes. Moderación en porciones."
+        },
+        macros: {
+          protein: 140,
+          carbs: 180,
+          fat: 60
+        }
+      },
+      "vegan": {
+        name: "Vegano",
+        description: "Plan basado en plantas alto en proteínas",
+        meals: {
+          breakfast: "Smoothie de proteína vegana con leche de almendras, espinacas y 1 cucharada de semillas de chía",
+          snack1: "Hummus (1/4 taza) con vegetales crudos",
+          lunch: "Bowl de quinoa (1 taza), garbanzos (1/2 taza), aguacate (1/4 unidad) y vegetales asados",
+          snack2: "Edamame (1/2 taza) con sal marina",
+          dinner: "Tofu (150g) salteado con brócoli y arroz integral (1/2 taza)",
+          notes: "Combinar legumbres con cereales para proteína completa. Suplementar B12."
+        },
+        macros: {
+          protein: 130,
+          carbs: 200,
+          fat: 60
+        }
+      },
+      "keto": {
+        name: "Cetogénico",
+        description: "Plan bajo en carbohidratos, alto en grasas saludables",
+        meals: {
+          breakfast: "Omelette con 3 huevos, queso cheddar y espinacas cocidas en mantequilla",
+          snack1: "1 puñado de nueces de macadamia",
+          lunch: "Pechuga de pollo (150g) con ensalada de aguacate (1/2 unidad) y aderezo de aceite de oliva",
+          snack2: "Palitos de apio con mantequilla de almendras",
+          dinner: "Salmón (150g) con espárragos salteados en mantequilla y coliflor al vapor",
+          notes: "Mantener carbohidratos por debajo de 30g netos al día. Monitorear cetosis."
+        },
+        macros: {
+          protein: 120,
+          carbs: 25,
+          fat: 150
+        }
+      }
+    };
+
+    // =============== VARIABLES DE ESTADO ===============
+    let userProfile = {
+      nombre: "",
+      edad: "",
+      genero: "",
+      peso: "",
+      altura: "",
+      objetivos: "",
+      nivel: "",
+      streak: 0,
+      workoutsCompleted: 0,
+      lastWorkoutDate: null,
+      waterIntake: 0,
+      lastWaterDate: null,
+      measurements: [],
+      savedMealPlan: null,
+      macroTracking: {
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        date: null
+      },
+      achievements: [],
+      badges: []
+    };
+
+    let workoutCalendar = {};
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let today = new Date();
+    let currentReceta = null;
+    let chartInstance = null;
+
+    // =============== INICIALIZACIÓN ===============
+    function iniciarApp() {
+      cargarDatosUsuario();
+      aplicarModoAutomatico();
+      mostrarRecetaDelDia();
+      mostrarMotivacion();
+      calcularProgreso();
+      generarCalendario();
+      actualizarEstadisticasInicio();
+      generarRutinaDiaria();
+      iniciarChart();
+      iniciarWaterTracker();
+      actualizarMacros();
+      
+      // Mostrar modal de bienvenida solo la primera vez
+      if (!localStorage.getItem("gymfitFirstTime")) {
+        mostrarModal('welcome-modal');
+        localStorage.setItem("gymfitFirstTime", "true");
+      }
+      
+      // Reproducir música (silenciada por defecto)
+      document.getElementById("musica").muted = true;
+    }
+    
+    function cargarDatosUsuario() {
+      const datosGuardados = localStorage.getItem("gymfitUserProfile");
+      if (datosGuardados) {
+        userProfile = JSON.parse(datosGuardados);
+        actualizarFormularioPerfil();
+        actualizarPerfilGuardado();
+      }
+      
+      // Cargar calendario de entrenamientos
+      const calendarioGuardado = localStorage.getItem("gymfitWorkoutCalendar");
+      if (calendarioGuardado) {
+        workoutCalendar = JSON.parse(calendarioGuardado);
+      }
+      
+      // Verificar racha y consumo de agua
+      verificarRacha();
+      verificarAgua();
+    }
+    
+    function actualizarFormularioPerfil() {
+      document.getElementById("nombre").value = userProfile.nombre || "";
+      document.getElementById("edad").value = userProfile.edad || "";
+      document.getElementById("genero").value = userProfile.genero || "";
+      document.getElementById("peso").value = userProfile.peso || "";
+      document.getElementById("altura").value = userProfile.altura || "";
+      document.getElementById("objetivos").value = userProfile.objetivos || "";
+      document.getElementById("nivel").value = userProfile.nivel || "";
+    }
+    
+    function verificarRacha() {
+      if (!userProfile.lastWorkoutDate) return;
+      
+      const ultimaFecha = new Date(userProfile.lastWorkoutDate);
+      const diferenciaDias = Math.floor((today - ultimaFecha) / (1000 * 60 * 60 * 24));
+      
+      if (diferenciaDias === 1) {
+        userProfile.streak++;
+      } else if (diferenciaDias > 1) {
+        userProfile.streak = 0;
+      }
+      
+      guardarDatosUsuario();
+    }
+    
+    function verificarAgua() {
+      if (!userProfile.lastWaterDate) return;
+      
+      const ultimaFecha = new Date(userProfile.lastWaterDate);
+      if (ultimaFecha.toDateString() !== today.toDateString()) {
+        userProfile.waterIntake = 0;
+        guardarDatosUsuario();
+      }
+    }
+
+    // =============== INTERFAZ DE USUARIO ===============
+    function toggleModo() {
+      document.body.classList.toggle("claro");
+      localStorage.setItem("gymfitDarkMode", document.body.classList.contains("claro") ? "light" : "dark");
+      
+      // Cambiar icono
+      const icon = document.querySelector('.modo-toggle i');
+      if (document.body.classList.contains("claro")) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    }
+    
+    function toggleMusica() {
+      const musica = document.getElementById("musica");
+      musica.muted = !musica.muted;
+      
+      // Cambiar icono
+      const icon = document.querySelector('.mute-btn i');
+      if (musica.muted) {
+        icon.classList.remove('fa-volume-up');
+        icon.classList.add('fa-volume-mute');
+      } else {
+        icon.classList.remove('fa-volume-mute');
+        icon.classList.add('fa-volume-up');
+        if (musica.paused) musica.play();
+      }
+    }
+    
+    function aplicarModoAutomatico() {
+      const modoGuardado = localStorage.getItem("gymfitDarkMode");
+      if (modoGuardado) {
+        document.body.classList.toggle("claro", modoGuardado === "light");
+        
+        // Actualizar icono según el modo
+        const icon = document.querySelector('.modo-toggle i');
+        if (modoGuardado === "light") {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+        return;
+      }
+      
+      const hora = new Date().getHours();
+      if (hora >= 18 || hora < 6) {
+        document.body.classList.remove("claro");
+        document.querySelector('.modo-toggle i').classList.add('fa-moon');
+        document.querySelector('.modo-toggle i').classList.remove('fa-sun');
+      } else {
+        document.body.classList.add("claro");
+        document.querySelector('.modo-toggle i').classList.add('fa-sun');
+        document.querySelector('.modo-toggle i').classList.remove('fa-moon');
+      }
+    }
+    
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      
+      // Actualizar botones de navegación
+      document.querySelectorAll('.nav-bar button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // El botón de inicio no está en la barra de navegación
+      if (id !== 'inicio') {
+        const btn = Array.from(document.querySelectorAll('.nav-bar button')).find(
+          b => b.getAttribute('onclick').includes(id)
+        );
+        if (btn) btn.classList.add('active');
+      }
+      
+      // Actualizar contenido específico de la sección
+      if (id === 'progreso') {
+        generarRutinaDiaria();
+      } else if (id === 'calendar') {
+        generarCalendario();
+      }
+    }
+    
+    function cambiarTab(tabName) {
+      // Ocultar todos los contenidos de pestañas
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Desactivar todas las pestañas
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Activar la pestaña seleccionada
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+      
+      // Activar el tab correspondiente
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        if (tab.textContent.toLowerCase().includes(tabName)) {
+          tab.classList.add('active');
+        }
+      });
+    }
+    
+    function mostrarModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+    }
+    
+    function cerrarModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+    
+    function mostrarTutorial() {
+      cerrarModal('welcome-modal');
+      mostrarNotificacion("Tutorial: Explora todas las secciones de la app. Completa tu perfil para obtener recomendaciones personalizadas. Marca tus ejercicios como completados y sigue tu progreso.", "info");
+    }
+
+    // =============== FUNCIONALIDADES DE PERFIL ===============
+    function guardarPerfil() {
+      if (!document.getElementById("nombre").value || !document.getElementById("edad").value) {
+        mostrarNotificacion("Por favor completa al menos tu nombre y edad", "error");
+        return;
+      }
+      
+      userProfile = {
+        ...userProfile,
+        nombre: document.getElementById("nombre").value,
+        edad: document.getElementById("edad").value,
+        genero: document.getElementById("genero").value,
+        objetivos: document.getElementById("objetivos").value,
+        nivel: document.getElementById("nivel").value
+      };
+      
+      guardarDatosUsuario();
+      actualizarPerfilGuardado();
+      generarRutinaDiaria();
+      calcularProgreso();
+      
+      // Mostrar notificación
+      mostrarNotificacion("Perfil actualizado con éxito", "success");
+    }
+    
+    function guardarMedidas() {
+      const peso = parseFloat(document.getElementById("peso").value);
+      const altura = parseInt(document.getElementById("altura").value);
+      const waist = parseFloat(document.getElementById("waist").value);
+      const hip = parseFloat(document.getElementById("hip").value);
+      
+      if (!peso || !altura) {
+        mostrarNotificacion("Por favor ingresa al menos peso y altura", "error");
+        return;
+      }
+      
+      const nuevaMedida = {
+        fecha: new Date().toISOString(),
+        peso,
+        altura,
+        waist,
+        hip
+      };
+      
+      userProfile.measurements.push(nuevaMedida);
+      guardarDatosUsuario();
+      
+      // Calcular y mostrar IMC
+      calcularIMC(peso, altura);
+      
+      mostrarNotificacion("Medidas guardadas correctamente", "success");
+    }
+    
+    function calcularIMC(peso, altura) {
+      const alturaMetros = altura / 100;
+      const imc = peso / (alturaMetros * alturaMetros);
+      
+      let categoria = "";
+      if (imc < 18.5) categoria = "Bajo peso";
+      else if (imc < 25) categoria = "Peso normal";
+      else if (imc < 30) categoria = "Sobrepeso";
+      else categoria = "Obesidad";
+      
+      document.getElementById("imc-result").innerHTML = `
+        <div class="stat-card">
+          <h4>IMC: ${imc.toFixed(1)}</h4>
+          <p>${categoria}</p>
+          <p>Fecha: ${new Date().toLocaleDateString()}</p>
+        </div>
+      `;
+    }
+    
+    function mostrarHistorialMedidas() {
+      if (userProfile.measurements.length === 0) {
+        document.getElementById("imc-result").innerHTML = "<p>No hay historial de medidas registrado.</p>";
+        return;
+      }
+      
+      let html = "<h4>Historial de Medidas</h4>";
+      userProfile.measurements.forEach(medida => {
+        const fecha = new Date(medida.fecha).toLocaleDateString();
+        const alturaMetros = medida.altura / 100;
+        const imc = medida.peso / (alturaMetros * alturaMetros);
+        
+        html += `
+          <div class="exercise-item">
+            <div>
+              <h4>${fecha}</h4>
+              <p>Peso: ${medida.peso}kg | Altura: ${medida.altura}cm</p>
+              <p>IMC: ${imc.toFixed(1)} | Cintura: ${medida.waist || '--'}cm</p>
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById("imc-result").innerHTML = html;
+    }
+    
+    function guardarDatosUsuario() {
+      localStorage.setItem("gymfitUserProfile", JSON.stringify(userProfile));
+    }
+    
+    function actualizarPerfilGuardado() {
+      const perfilDiv = document.getElementById("perfilGuardado");
+      if (userProfile.nombre) {
+        perfilDiv.innerHTML = `
+          <div class="stat-card">
+            <h3>${userProfile.nombre}</h3>
+            <p><i class="fas fa-user"></i> ${userProfile.edad || '--'} años | <i class="fas fa-venus-mars"></i> ${userProfile.genero || 'No especificado'}</p>
+            <p><i class="fas fa-weight"></i> ${userProfile.peso || '--'}kg | <i class="fas fa-ruler-vertical"></i> ${userProfile.altura || '--'}cm</p>
+            <p><i class="fas fa-level-up-alt"></i> ${userProfile.nivel ? userProfile.nivel.charAt(0).toUpperCase() + userProfile.nivel.slice(1) : 'No especificado'}</p>
+            <p><strong><i class="fas fa-bullseye"></i> Objetivos:</strong> ${userProfile.objetivos || 'No especificados'}</p>
+          </div>
+        `;
+      } else {
+        perfilDiv.innerHTML = "<p>Completa tu perfil para ver la información aquí.</p>";
+      }
+    }
+    
+    function mostrarNotificaciones() {
+      mostrarNotificacion("Configuración de notificaciones:\n\n1. Recordatorio de entrenamiento: 18:00\n2. Recordatorio de agua: Cada 2 horas\n3. Recordatorio de estiramientos: 21:00", "info");
+    }
+    
+    function exportarDatos() {
+      const data = {
+        profile: userProfile,
+        calendar: workoutCalendar
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `gymfit_datos_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      
+      mostrarNotificacion("Datos exportados correctamente", "success");
+    }
+    
+    function resetApp() {
+      if (confirm("¿Estás seguro de que quieres restablecer la aplicación? Se perderán todos tus datos.")) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    // =============== FUNCIONALIDADES DE PROGRESO ===============
+    function calcularProgreso() {
+      const inicio = new Date(new Date().getFullYear(), 0, 1);
+      const dias = Math.floor((today - inicio) / (1000 * 60 * 60 * 24)) + 1;
+      document.getElementById("diaEntrenamiento").innerText = dias;
+      
+      let recomendacion = "";
+      if (userProfile.nivel) {
+        switch(userProfile.nivel) {
+          case "beginner":
+            recomendacion = "Hoy enfócate en aprender la técnica correcta de cada ejercicio. Realiza 3 series de cada ejercicio con descansos de 60 segundos. No te preocupes por la intensidad, concéntrate en la forma.";
+            break;
+          case "intermediate":
+            recomendacion = "Intensifica tu entrenamiento reduciendo los descansos a 45 segundos entre series. Agrega un 10% más de peso si es posible. Prueba superseries para aumentar la intensidad.";
+            break;
+          case "advanced":
+            recomendacion = "Desafíate hoy con dropsets o series descendentes. Mantén buena forma incluso con la fatiga. Considera técnicas avanzadas como repeticiones forzadas o negativas.";
+            break;
+          default:
+            recomendacion = "Realiza una rutina completa y estira al finalizar. Escucha a tu cuerpo y ajusta la intensidad según cómo te sientas.";
+        }
+      } else {
+        recomendacion = "Completa tu perfil para obtener recomendaciones personalizadas según tu nivel de experiencia.";
+      }
+      
+      document.getElementById("recomendacion").innerText = recomendacion;
+      
+      // Actualizar barra de progreso
+      const porcentaje = Math.min(Math.floor((userProfile.workoutsCompleted / 30) * 100), 100);
+      document.getElementById("progress-fill").style.width = `${porcentaje}%`;
+      document.getElementById("progress-days").innerText = `${userProfile.workoutsCompleted}/30 días`;
+      document.getElementById("progress-percent").innerText = `${porcentaje}% completado`;
+      
+      // Actualizar logros e insignias
+      actualizarLogros();
+      actualizarInsignias();
+    }
+    
+    function actualizarLogros() {
+      const achievementsList = document.getElementById("achievements-list");
+      const recentAchievements = document.getElementById("recent-achievements");
+      achievementsList.innerHTML = "";
+      recentAchievements.innerHTML = "";
+      
+      // Actualizar estado de logros
+      logros[0].obtenido = userProfile.workoutsCompleted >= 1;
+      logros[1].obtenido = userProfile.streak >= 3;
+      logros[2].obtenido = userProfile.workoutsCompleted >= 7;
+      logros[3].obtenido = userProfile.workoutsCompleted >= 15;
+      logros[4].obtenido = userProfile.workoutsCompleted >= 30;
+      logros[5].obtenido = userProfile.waterIntake >= 8 && userProfile.streak >= 7;
+      logros[6].obtenido = userProfile.streak >= 10;
+      logros[7].obtenido = userProfile.workoutsCompleted >= 5 && userProfile.waterIntake >= 8;
+      
+      // Mostrar todos los logros
+      logros.forEach(logro => {
+        const logroElement = document.createElement("div");
+        logroElement.className = `exercise-item ${logro.obtenido ? 'completed' : ''}`;
+        logroElement.innerHTML = `
+          <div>
+            <h4>${logro.nombre} ${logro.obtenido ? logro.insignia : ''}</h4>
+            <p>${logro.descripcion}</p>
+          </div>
+          ${logro.obtenido ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-circle"></i>'}
+        `;
+        achievementsList.appendChild(logroElement);
+      });
+      
+      // Mostrar solo los logros recientes (últimos 3 obtenidos)
+      const logrosObtenidos = logros.filter(l => l.obtenido).slice(-3).reverse();
+      if (logrosObtenidos.length > 0) {
+        logrosObtenidos.forEach(logro => {
+          const logroElement = document.createElement("div");
+          logroElement.className = `exercise-item completed`;
+          logroElement.innerHTML = `
+            <div>
+              <h4>${logro.nombre} ${logro.insignia}</h4>
+              <p>${logro.descripcion}</p>
+            </div>
+          `;
+          recentAchievements.appendChild(logroElement);
+        });
+      } else {
+        recentAchievements.innerHTML = "<p>Aún no has obtenido logros. ¡Completa entrenamientos para desbloquearlos!</p>";
+      }
+    }
+    
+    function actualizarInsignias() {
+      const badgesGrid = document.getElementById("badges-grid");
+      badgesGrid.innerHTML = "";
+      
+      // Actualizar estado de insignias
+      badges[0].obtenida = userProfile.workoutsCompleted >= 1;
+      badges[1].obtenida = userProfile.streak >= 3;
+      badges[2].obtenida = userProfile.workoutsCompleted >= 7;
+      badges[3].obtenida = userProfile.workoutsCompleted >= 15;
+      badges[4].obtenida = userProfile.workoutsCompleted >= 30;
+      badges[5].obtenida = userProfile.waterIntake >= 8 && userProfile.streak >= 7;
+      badges[6].obtenida = userProfile.workoutsCompleted >= 7 && userProfile.savedMealPlan;
+      badges[7].obtenida = userProfile.streak >= 10;
+      
+      // Mostrar insignias
+      badges.forEach(badge => {
+        const badgeElement = document.createElement("div");
+        badgeElement.className = `stat-card ${badge.obtenida ? '' : 'disabled'}`;
+        badgeElement.innerHTML = `
+          <div style="font-size: 2em;">${badge.icono}</div>
+          <h4>${badge.nombre}</h4>
+          <p class="stat-label">${badge.descripcion}</p>
+        `;
+        badgesGrid.appendChild(badgeElement);
+      });
+    }
+    
+    function iniciarChart() {
+      const ctx = document.getElementById('progress-chart').getContext('2d');
+      
+      // Destruir gráfico anterior si existe
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+      
+      // Datos de ejemplo - en una app real estos vendrían de un historial
+      const labels = Array.from({length: 7}, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (6 - i));
+        return d.toLocaleDateString('es', { weekday: 'short' });
+      });
+      
+      const data = labels.map((_, i) => {
+        return i === 6 ? userProfile.workoutsCompleted : Math.floor(Math.random() * 5);
+      });
+      
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Entrenamientos esta semana',
+            data: data,
+            backgroundColor: labels.map((_, i) => 
+              i === 6 ? 'rgba(76, 175, 80, 0.7)' : 'rgba(76, 175, 80, 0.4)'
+            ),
+            borderColor: 'rgba(76, 175, 80, 1)',
+            borderWidth: 1,
+            borderRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `Entrenamientos: ${context.raw}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =============== FUNCIONALIDADES DE ALIMENTACIÓN ===============
+    function mostrarRecetaDelDia() {
+      const hoy = new Date();
+      const diaDelAno = Math.floor((hoy - new Date(hoy.getFullYear(), 0, 0)) / 86400000);
+      currentReceta = recetasDetalladas[Math.floor(diaDelAno) % recetasDetalladas.length];
+      
+      // Versión resumida para la página de inicio
+      const divInicio = document.getElementById("recetaDia");
+      divInicio.innerHTML = `
+        <div class="exercise-item">
+          <div>
+            <h4>${currentReceta.titulo}</h4>
+            <p><i class="fas fa-${currentReceta.tipo === 'proteica' ? 'drumstick-bite' : 
+              currentReceta.tipo === 'vegetariana' ? 'leaf' : 
+              currentReceta.tipo === 'baja en carbohidratos' ? 'bread-slice' : 'balance-scale'}"></i> 
+              ${currentReceta.tipo.charAt(0).toUpperCase() + currentReceta.tipo.slice(1)}</p>
+            <p><strong>Ingredientes principales:</strong> ${currentReceta.ingredientes.slice(0, 2).join(', ')}</p>
+          </div>
+          <button class="outline" onclick="mostrarSeccion('alimentacion')">Ver</button>
+        </div>
+      `;
+      
+      // Versión completa para la página de alimentación
+      document.getElementById("recipe-title").textContent = currentReceta.titulo;
+      const divCompleta = document.getElementById("recetaDiaFull");
+      divCompleta.innerHTML = `
+        <p><i class="fas fa-${currentReceta.tipo === 'proteica' ? 'drumstick-bite' : 
+          currentReceta.tipo === 'vegetariana' ? 'leaf' : 
+          currentReceta.tipo === 'baja en carbohidratos' ? 'bread-slice' : 'balance-scale'}"></i> 
+          <strong>Tipo:</strong> ${currentReceta.tipo.charAt(0).toUpperCase() + currentReceta.tipo.slice(1)}</p>
+        <p><strong>Tiempo estimado:</strong> ${Math.floor(20 + Math.random() * 40)} minutos</p>
+        <strong><i class="fas fa-clipboard-list"></i> Ingredientes:</strong>
+        <ul>${currentReceta.ingredientes.map(i => `<li>${i}</li>`).join('')}</ul>
+        <strong><i class="fas fa-list-ol"></i> Preparación:</strong>
+        <ol>${currentReceta.pasos.map(p => `<li>${p}</li>`).join('')}</ol>
+      `;
+      
+      // Actualizar información nutricional
+      document.getElementById("nutrition-calories").textContent = currentReceta.nutricion.calorias;
+      document.getElementById("nutrition-protein").textContent = currentReceta.nutricion.proteinas;
+      document.getElementById("nutrition-carbs").textContent = currentReceta.nutricion.carbohidratos;
+      document.getElementById("nutrition-fat").textContent = currentReceta.nutricion.grasas;
+      document.getElementById("nutrition-fiber").textContent = currentReceta.nutricion.fibra;
+    }
+    
+    function leerRecetaActual() {
+      if (!currentReceta) return;
+      
+      if ('speechSynthesis' in window) {
+        const texto = `Receta del día: ${currentReceta.titulo}. Tipo: ${currentReceta.tipo}. Ingredientes: ${currentReceta.ingredientes.join(', ')}. Pasos: ${currentReceta.pasos.join('. ')}. Información nutricional: ${currentReceta.nutricion.calorias} calorías, ${currentReceta.nutricion.proteinas} de proteínas, ${currentReceta.nutricion.carbohidratos} de carbohidratos.`;
+        const mensaje = new SpeechSynthesisUtterance(texto);
+        mensaje.lang = 'es-ES';
+        speechSynthesis.speak(mensaje);
+      } else {
+        mostrarNotificacion("La síntesis de voz no está soportada en tu navegador", "error");
+      }
+    }
+    
+    function generarPlanComidas() {
+      const tipoPlan = document.getElementById("meal-plan-select").value;
+      const plan = mealPlans[tipoPlan];
+      
+      let html = `
+        <h4>Plan para ${plan.name}</h4>
+        <p>${plan.description}</p>
+        <div class="exercise-item">
+          <h4><i class="fas fa-coffee"></i> Desayuno</h4>
+          <p>${plan.meals.breakfast}</p>
+        </div>
+        <div class="exercise-item">
+          <h4><i class="fas fa-apple-alt"></i> Snack Mañana</h4>
+          <p>${plan.meals.snack1}</p>
+        </div>
+        <div class="exercise-item">
+          <h4><i class="fas fa-utensils"></i> Almuerzo</h4>
+          <p>${plan.meals.lunch}</p>
+        </div>
+        <div class="exercise-item">
+          <h4><i class="fas fa-carrot"></i> Snack Tarde</h4>
+          <p>${plan.meals.snack2}</p>
+        </div>
+        <div class="exercise-item">
+          <h4><i class="fas fa-moon"></i> Cena</h4>
+          <p>${plan.meals.dinner}</p>
+        </div>
+        <div class="exercise-item">
+          <h4><i class="fas fa-info-circle"></i> Notas</h4>
+          <p>${plan.meals.notes}</p>
+        </div>
+      `;
+      
+      document.getElementById("meal-plan-result").innerHTML = html;
+      
+      // Guardar referencia al plan seleccionado
+      userProfile.savedMealPlan = tipoPlan;
+      guardarDatosUsuario();
+      
+      // Actualizar macros
+      actualizarMacros();
+    }
+    
+    function guardarPlanComidas() {
+      if (!userProfile.savedMealPlan) {
+        mostrarNotificacion("Primero genera un plan de comidas", "error");
+        return;
+      }
+      
+      mostrarNotificacion("Plan de comidas guardado correctamente", "success");
+      actualizarInsignias();
+    }
+    
+    function actualizarMacros() {
+      if (!userProfile.savedMealPlan) return;
+      
+      const plan = mealPlans[userProfile.savedMealPlan];
+      const macros = plan.macros;
+      
+      document.getElementById("protein-goal").textContent = `${macros.protein}g objetivo`;
+      document.getElementById("carbs-goal").textContent = `${macros.carbs}g objetivo`;
+      document.getElementById("fat-goal").textContent = `${macros.fat}g objetivo`;
+      
+      // Actualizar barras de progreso
+      const proteinPercent = Math.min((userProfile.macroTracking.protein / macros.protein) * 100, 100);
+      const carbsPercent = Math.min((userProfile.macroTracking.carbs / macros.carbs) * 100, 100);
+      const fatPercent = Math.min((userProfile.macroTracking.fat / macros.fat) * 100, 100);
+      
+      document.getElementById("protein-progress").style.width = `${proteinPercent}%`;
+      document.getElementById("carbs-progress").style.width = `${carbsPercent}%`;
+      document.getElementById("fat-progress").style.width = `${fatPercent}%`;
+      
+      document.getElementById("protein-consumed").textContent = `${userProfile.macroTracking.protein}g`;
+      document.getElementById("carbs-consumed").textContent = `${userProfile.macroTracking.carbs}g`;
+      document.getElementById("fat-consumed").textContent = `${userProfile.macroTracking.fat}g`;
+    }
+    
+    function mostrarModalMacros() {
+      if (!userProfile.savedMealPlan) {
+        mostrarNotificacion("Primero selecciona un plan de alimentación", "error");
+        return;
+      }
+      
+      const plan = mealPlans[userProfile.savedMealPlan];
+      
+      let html = `
+        <h4>Registrar Macronutrientes</h4>
+        <p>Ingresa los gramos consumidos hoy:</p>
+        
+        <label>Proteínas (${userProfile.macroTracking.protein}/${plan.macros.protein}g)</label>
+        <input type="number" id="protein-input" value="${userProfile.macroTracking.protein}" min="0" max="${plan.macros.protein * 2}">
+        
+        <label>Carbohidratos (${userProfile.macroTracking.carbs}/${plan.macros.carbs}g)</label>
+        <input type="number" id="carbs-input" value="${userProfile.macroTracking.carbs}" min="0" max="${plan.macros.carbs * 2}">
+        
+        <label>Grasas (${userProfile.macroTracking.fat}/${plan.macros.fat}g)</label>
+        <input type="number" id="fat-input" value="${userProfile.macroTracking.fat}" min="0" max="${plan.macros.fat * 2}">
+      `;
+      
+      document.getElementById("exercise-modal-title").textContent = "Registro de Macros";
+      document.getElementById("exercise-modal-content").innerHTML = html;
+      
+      // Cambiar el botón del modal
+      const modalButton = document.querySelector("#exercise-modal button");
+      modalButton.textContent = "Guardar";
+      modalButton.onclick = guardarMacros;
+      
+      mostrarModal("exercise-modal");
+    }
+    
+    function guardarMacros() {
+      const protein = parseInt(document.getElementById("protein-input").value) || 0;
+      const carbs = parseInt(document.getElementById("carbs-input").value) || 0;
+      const fat = parseInt(document.getElementById("fat-input").value) || 0;
+      
+      userProfile.macroTracking = {
+        protein,
+        carbs,
+        fat,
+        date: new Date().toISOString()
+      };
+      
+      guardarDatosUsuario();
+      actualizarMacros();
+      cerrarModal("exercise-modal");
+      
+      mostrarNotificacion("Macronutrientes registrados correctamente", "success");
+    }
+
+    // =============== FUNCIONALIDADES DE MOTIVACIÓN ===============
+    function mostrarMotivacion() {
+      const mensaje = mensajes[Math.floor(Math.random() * mensajes.length)];
+      document.getElementById("mensajeMotivador").innerText = mensaje.texto;
+      document.getElementById("quote-author").innerText = `— ${mensaje.autor}`;
+    }
+
+    // =============== FUNCIONALIDADES DE CALENDARIO ===============
+    function generarCalendario() {
+      const calendarGrid = document.getElementById("calendar-grid");
+      const monthTitle = document.getElementById("calendar-month");
+      calendarGrid.innerHTML = "";
+      
+      // Configurar título del mes
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      monthTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      
+      // Obtener primer día del mes y cantidad de días
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      // Ajustar para que la semana empiece en lunes
+      const offset = firstDay === 0 ? 6 : firstDay - 1;
+      
+      // Días vacíos al inicio
+      for (let i = 0; i < offset; i++) {
+        const emptyDay = document.createElement("div");
+        emptyDay.className = "calendar-day empty";
+        calendarGrid.appendChild(emptyDay);
+      }
+      
+      // Días del mes
+      for (let i = 1; i <= daysInMonth; i++) {
+        const dayElement = document.createElement("div");
+        dayElement.className = "calendar-day";
+        dayElement.textContent = i;
+        
+        const dateKey = `${currentYear}-${currentMonth + 1}-${i}`;
+        const isToday = i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+        
+        // Marcar día actual
+        if (isToday) {
+          dayElement.classList.add("today");
+        }
+        
+        // Marcar días con entrenamiento
+        if (workoutCalendar[dateKey]) {
+          dayElement.classList.add("has-workout");
+        }
+        
+        dayElement.addEventListener("click", () => mostrarDetallesDia(dateKey, i));
+        calendarGrid.appendChild(dayElement);
+      }
+    }
+    
+    function previousMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generarCalendario();
+    }
+    
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generarCalendario();
+    }
+    
+    function mostrarDetallesDia(dateKey, day) {
+      const detailsDiv = document.getElementById("workout-details");
+      
+      if (workoutCalendar[dateKey]) {
+        detailsDiv.innerHTML = `
+          <h4>${workoutCalendar[dateKey].nombre}</h4>
+          <p>${workoutCalendar[dateKey].notas || 'Sin notas adicionales'}</p>
+          <div class="btn-group">
+            <button class="secondary" onclick="eliminarRutina('${dateKey}')"><i class="fas fa-trash"></i> Eliminar</button>
+            <button class="outline" onclick="copiarRutina('${dateKey}')"><i class="fas fa-copy"></i> Copiar</button>
+          </div>
+        `;
+      } else {
+        // Preparar formulario para agregar nueva rutina
+        const fecha = new Date(currentYear, currentMonth, day);
+        const fechaFormateada = fecha.toISOString().split('T')[0];
+        
+        detailsDiv.innerHTML = `
+          <p>No hay rutina programada para el ${day}/${currentMonth + 1}/${currentYear}</p>
+          <input type="date" id="new-workout-date" value="${fechaFormateada}" />
+          <input type="text" id="new-workout-name" placeholder="Nombre de la rutina" />
+          <textarea id="new-workout-notes" placeholder="Notas o ejercicios específicos"></textarea>
+          <button onclick="agregarRutina()"><i class="fas fa-save"></i> Agregar Rutina</button>
+        `;
+      }
+    }
+    
+    function guardarRutina() {
+      const fecha = document.getElementById("workout-date").value;
+      const nombre = document.getElementById("workout-name").value;
+      const notas = document.getElementById("workout-notes").value;
+      
+      if (!fecha || !nombre) {
+        mostrarNotificacion("Por favor ingresa al menos una fecha y un nombre para la rutina", "error");
+        return;
+      }
+      
+      workoutCalendar[fecha] = {
+        nombre,
+        notas
+      };
+      
+      localStorage.setItem("gymfitWorkoutCalendar", JSON.stringify(workoutCalendar));
+      generarCalendario();
+      
+      // Limpiar campos
+      document.getElementById("workout-name").value = "";
+      document.getElementById("workout-notes").value = "";
+      
+      mostrarNotificacion("Rutina guardada correctamente", "success");
+    }
+    
+    function agregarRutina() {
+      const fecha = document.getElementById("new-workout-date").value;
+      const nombre = document.getElementById("new-workout-name").value;
+      const notas = document.getElementById("new-workout-notes").value;
+      
+      if (!nombre) {
+        mostrarNotificacion("Por favor ingresa un nombre para la rutina", "error");
+        return;
+      }
+      
+      workoutCalendar[fecha] = {
+        nombre,
+        notas
+      };
+      
+      localStorage.setItem("gymfitWorkoutCalendar", JSON.stringify(workoutCalendar));
+      generarCalendario();
+      
+      mostrarNotificacion("Rutina agregada correctamente", "success");
+    }
+    
+    function eliminarRutina(dateKey) {
+      delete workoutCalendar[dateKey];
+      localStorage.setItem("gymfitWorkoutCalendar", JSON.stringify(workoutCalendar));
+      generarCalendario();
+      document.getElementById("workout-details").innerHTML = "<p>Selecciona un día para ver los detalles del entrenamiento</p>";
+      
+      mostrarNotificacion("Rutina eliminada correctamente", "success");
+    }
+    
+    function copiarRutina(dateKey) {
+      const rutina = workoutCalendar[dateKey];
+      document.getElementById("workout-name").value = `${rutina.nombre} (Copia)`;
+      document.getElementById("workout-notes").value = rutina.notas || "";
+      mostrarSeccion('calendar');
+      
+      mostrarNotificacion("Rutina copiada al formulario", "info");
+    }
+    
+    function generarRutinaAutomatica() {
+      if (!userProfile.nivel) {
+        mostrarNotificacion("Completa tu perfil para generar rutinas automáticas", "error");
+        return;
+      }
+      
+      const fecha = document.getElementById("workout-date").value;
+      if (!fecha) {
+        mostrarNotificacion("Selecciona una fecha primero", "error");
+        return;
+      }
+      
+      const nivel = userProfile.nivel;
+      let nombreRutina = "";
+      let notasRutina = "Ejercicios sugeridos:\n";
+      
+      switch(nivel) {
+        case "beginner":
+          nombreRutina = "Rutina Principiante Full Body";
+          ejercicios.beginner.forEach(ej => {
+            notasRutina += `- ${ej.nombre}: ${ej.series} x ${ej.repeticiones || ej.duracion}\n`;
+          });
+          break;
+        case "intermediate":
+          nombreRutina = "Rutina Intermedia Split Superior/Inferior";
+          const dias = new Date(fecha).getDay(); // 0=domingo, 1=lunes...
+          if (dias % 2 === 0) {
+            notasRutina += "Día Inferior:\n";
+            ejercicios.intermediate.slice(0, 3).forEach(ej => {
+              notasRutina += `- ${ej.nombre}: ${ej.series} x ${ej.repeticiones || ej.duracion}\n`;
+            });
+          } else {
+            notasRutina += "Día Superior:\n";
+            ejercicios.intermediate.slice(2).forEach(ej => {
+              notasRutina += `- ${ej.nombre}: ${ej.series} x ${ej.repeticiones || ej.duracion}\n`;
+            });
+          }
+          break;
+        case "advanced":
+          nombreRutina = "Rutina Avanzada Push/Pull/Legs";
+          const diaSemana = new Date(fecha).getDay();
+          if (diaSemana % 3 === 0) {
+            notasRutina += "Día Push (Empuje):\n";
+            [ejercicios.advanced[1], ejercicios.advanced[5]].forEach(ej => {
+              notasRutina += `- ${ej.nombre}: ${ej.series} x ${ej.repeticiones || ej.duracion}\n`;
+            });
+          } else if (diaSemana % 3 === 1) {
+            notasRutina += "Día Pull (Jalón):\n";
+            [ejercicios.advanced[3], ejercicios.advanced[0]].forEach(ej => {
+              notasRutina += `- ${ej.nombre}: ${ej.series} x ${ej.repeticiones || ej.duracion}\n`;
+            });
+          } else {
+            notasRutina += "Día Legs (Piernas):\n";
+            [ejercicios.advanced[2], ejercicios.advanced[4]].forEach(ej => {
+              notasRutina += `- ${ej.nombre}: ${ej.series} x ${ej.repeticiones || ej.duracion}\n`;
+            });
+          }
+          break;
+      }
+      
+      document.getElementById("workout-name").value = nombreRutina;
+      document.getElementById("workout-notes").value = notasRutina;
+      
+      mostrarNotificacion("Rutina generada automáticamente", "success");
+    }
+
+    // =============== FUNCIONALIDADES DE RUTINA ===============
+    function generarRutinaDiaria() {
+      const todayWorkoutDiv = document.getElementById("today-workout");
+      const exercisesDiv = document.getElementById("today-exercises");
+      
+      if (!userProfile.nivel) {
+        todayWorkoutDiv.innerHTML = "<p>Completa tu perfil para generar una rutina personalizada.</p>";
+        exercisesDiv.innerHTML = "";
+        return;
+      }
+      
+      const rutina = ejercicios[userProfile.nivel];
+      let html = `<h4><i class="fas fa-dumbbell"></i> Rutina para ${userProfile.nivel.charAt(0).toUpperCase() + userProfile.nivel.slice(1)}</h4><ul>`;
+      let exercisesHtml = "";
+      
+      rutina.forEach((ejercicio, index) => {
+        html += `<li>${ejercicio.nombre} - ${ejercicio.series} x ${ejercicio.repeticiones || ejercicio.duracion}</li>`;
+        
+        exercisesHtml += `
+          <div class="exercise-item ${ejercicio.completado ? 'completed' : ''}" onclick="mostrarDetalleEjercicio(${index})">
+            <div class="exercise-info">
+              <h4>${ejercicio.nombre}</h4>
+              <p>${ejercicio.series} x ${ejercicio.repeticiones || ejercicio.duracion} | ${ejercicio.musculos}</p>
+            </div>
+            <input type="checkbox" ${ejercicio.completado ? 'checked' : ''} 
+                   onchange="marcarEjercicioCompletado(${index}, this.checked)" />
+          </div>
+        `;
+      });
+      
+      html += `</ul><button onclick="completarEntrenamiento()"><i class="fas fa-check-circle"></i> Marcar como completado</button>`;
+      
+      // Verificar si ya hay un entrenamiento programado para hoy
+      const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+      if (workoutCalendar[todayKey]) {
+        html = `
+          <h4><i class="fas fa-calendar-check"></i> Rutina Programada: ${workoutCalendar[todayKey].nombre}</h4>
+          <p>${workoutCalendar[todayKey].notas || 'Sin notas adicionales'}</p>
+          ${html}
+        `;
+      }
+      
+      todayWorkoutDiv.innerHTML = html;
+      exercisesDiv.innerHTML = exercisesHtml;
+    }
+    
+    function mostrarDetalleEjercicio(index) {
+      const nivel = userProfile.nivel;
+      const ejercicio = ejercicios[nivel][index];
+      
+      let html = `
+        <h4>${ejercicio.nombre}</h4>
+        <p><strong>Series:</strong> ${ejercicio.series}</p>
+        <p><strong>Repeticiones/Duración:</strong> ${ejercicio.repeticiones || ejercicio.duracion}</p>
+        <p><strong>Músculos trabajados:</strong> ${ejercicio.musculos}</p>
+        <h5>Instrucciones:</h5>
+        <p>${ejercicio.descripcion}</p>
+        <div class="btn-group">
+          <button class="outline" onclick="marcarEjercicioCompletado(${index}, true)">Marcar como completado</button>
+        </div>
+      `;
+      
+      document.getElementById("exercise-modal-title").textContent = ejercicio.nombre;
+      document.getElementById("exercise-modal-content").innerHTML = html;
+      
+      // Cambiar el botón del modal
+      const modalButton = document.querySelector("#exercise-modal button");
+      modalButton.textContent = "Cerrar";
+      modalButton.className = "";
+      modalButton.onclick = function() { cerrarModal("exercise-modal"); };
+      
+      mostrarModal("exercise-modal");
+    }
+    
+    function marcarEjercicioCompletado(index, completado) {
+      const nivel = userProfile.nivel;
+      ejercicios[nivel][index].completado = completado;
+      
+      // Actualizar la visualización
+      const exerciseItems = document.querySelectorAll("#today-exercises .exercise-item");
+      if (completado) {
+        exerciseItems[index].classList.add("completed");
+      } else {
+        exerciseItems[index].classList.remove("completed");
+      }
+      
+      // Cerrar el modal si está abierto
+      cerrarModal("exercise-modal");
+    }
+    
+    function completarEntrenamiento() {
+      const nivel = userProfile.nivel;
+      const todosCompletados = ejercicios[nivel].every(e => e.completado);
+      
+      if (!todosCompletados) {
+        mostrarNotificacion("¡Falta completar algunos ejercicios!", "error");
+        return;
+      }
+      
+      // Actualizar estadísticas
+      userProfile.workoutsCompleted++;
+      userProfile.lastWorkoutDate = new Date().toISOString();
+      
+      // Verificar si es un nuevo día en la racha
+      const ultimaFecha = userProfile.lastWorkoutDate ? new Date(userProfile.lastWorkoutDate) : null;
+      if (!ultimaFecha || new Date().getDate() !== ultimaFecha.getDate()) {
+        userProfile.streak++;
+      }
+      
+      // Reiniciar estado de ejercicios
+      ejercicios[nivel].forEach(ej => ej.completado = false);
+      
+      guardarDatosUsuario();
+      actualizarEstadisticasInicio();
+      calcularProgreso();
+      
+      mostrarNotificacion("¡Entrenamiento completado con éxito! 🎉", "success");
+      
+      // Actualizar la rutina mostrada
+      generarRutinaDiaria();
+    }
+    
+    function actualizarEstadisticasInicio() {
+      document.getElementById("streak-days").textContent = userProfile.streak || 0;
+      document.getElementById("workouts-completed").textContent = userProfile.workoutsCompleted || 0;
+      
+      // Datos de ejemplo (en una app real estos vendrían de seguimiento)
+      document.getElementById("water-intake").textContent = `${userProfile.waterIntake || 0}/8`;
+      document.getElementById("calories-burned").textContent = (userProfile.workoutsCompleted * 250) || 0;
+    }
+    
+    function iniciarWaterTracker() {
+      const waterTracker = document.getElementById("water-tracker");
+      waterTracker.innerHTML = "<h3><i class='fas fa-tint'></i> Seguimiento de Agua</h3>";
+      
+      for (let i = 0; i < 8; i++) {
+        const glass = document.createElement("div");
+        glass.className = `water-glass ${i < userProfile.waterIntake ? 'filled' : ''}`;
+        glass.onclick = function() { registrarVasoAgua(i + 1); };
+        waterTracker.appendChild(glass);
+      }
+    }
+    
+    function registrarVasoAgua(cantidad) {
+      // Verificar si es un nuevo día
+      if (userProfile.lastWaterDate) {
+        const lastDate = new Date(userProfile.lastWaterDate);
+        if (lastDate.toDateString() !== today.toDateString()) {
+          userProfile.waterIntake = 0;
+        }
+      }
+      
+      userProfile.waterIntake = cantidad;
+      userProfile.lastWaterDate = new Date().toISOString();
+      guardarDatosUsuario();
+      
+      // Actualizar interfaz
+      iniciarWaterTracker();
+      actualizarEstadisticasInicio();
+      calcularProgreso();
+      
+      if (cantidad >= 8) {
+        mostrarNotificacion("¡Meta diaria de agua alcanzada! 💧", "success");
+      }
+    }
+    
+    function mostrarNotificacion(mensaje, tipo) {
+      // Crear elemento de notificación
+      const notificacion = document.createElement("div");
+      notificacion.className = `notification ${tipo}`;
+      notificacion.textContent = mensaje;
+      
+      // Agregar al cuerpo del documento
+      document.body.appendChild(notificacion);
+      
+      // Animación de entrada
+      setTimeout(() => {
+        notificacion.style.opacity = "1";
+        notificacion.style.transform = "translateY(0)";
+      }, 10);
+      
+      // Eliminar después de 3 segundos
+      setTimeout(() => {
+        notificacion.style.opacity = "0";
+        notificacion.style.transform = "translateY(-20px)";
+        setTimeout(() => {
+          document.body.removeChild(notificacion);
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
